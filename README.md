@@ -44,7 +44,7 @@
 ## 📁 폴더 구조
 
 ```
-17-Sprint-Mission
+panda-market
 ├── index.html            # 랜딩 페이지
 ├── login/index.html      # 로그인
 ├── signup/index.html     # 회원가입
