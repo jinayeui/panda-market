@@ -37,7 +37,7 @@ header {
 
 /* top-section */
 .top-section {
-    background-color: var(--color-bg-blue);
+    background-color: var(--color-lightblue);
 
     .inner-md {
         display: flex;
@@ -232,7 +232,7 @@ header {
 /* bottom-section */
 .bottom-section {
     margin-top: 8.63rem;
-    background-color: var(--color-bg-blue);
+    background-color: var(--color-lightblue);
 
     .inner-md {
         display: flex;
