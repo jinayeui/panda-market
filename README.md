@@ -1,67 +1,85 @@
-# 🐼 판다마켓 (Panda Market)
-
-코드잇 풀스택 부트캠프 17기 스프린트 미션 - 중고거래 플랫폼 **판다마켓** 프로젝트입니다.
+# 🐼 판다마켓 (Panda Market) - React
 
 ## 📄 페이지 구성
 
 | 경로 | 페이지 |
 | --- | --- |
-| `/` | 랜딩 페이지 |
-| `/login` | 로그인 |
-| `/signup` | 회원가입 |
-| `/items` | 상품 구경하기 |
-| `/faq` | FAQ ||
-| `/privacy` | 개인정보처리방침 |
+| `/` | 중고마켓 (상품 목록) |
 
 ## ✨ 주요 기능
 
-### 랜딩 페이지
-- 히어로 섹션, 서비스 소개(Hot item / Search / Register), 하단 배너, 푸터로 구성
-- 반응형 레이아웃 (`1200px`, `1024px`, `767px` 기준)
-- 헤더·푸터 좌우 여백은 `clamp()`로 화면 폭에 맞춰 조절
-- 모바일 화면에서는 텍스트형 로고로 교체
+### 중고마켓 페이지
+- **베스트 상품**: 좋아요가 많은 순서로 상품 표시 (`orderBy=favorite`)
+- **판매 중인 상품**: 전체 상품 목록
+  - **정렬**: 최신순 / 좋아요순 드롭다운 (모바일에서는 아이콘 버튼)
+  - **검색**: 검색어 입력 후 Enter로 검색, 결과가 없으면 안내 문구 표시
+  - **페이지네이션**: 이전/다음 버튼과 페이지 번호 5개씩 표시, 현재 페이지 강조
+  - 정렬이나 검색을 바꾸면 1페이지로 이동
+- 상품 이미지가 없거나 불러오지 못하면 회색 기본 영역 표시
 
-### 로그인 · 회원가입
-- 필수 입력값을 모두 채워야 제출 버튼 활성화
-- 입력값의 공백을 자동으로 제거한 뒤 버튼 활성화 여부 판단
-- 비밀번호 보기/숨기기 토글 버튼 UI
-- 간편 로그인(구글, 카카오) 링크
+### 공통
+- 헤더: 현재 페이지 메뉴 강조 (`NavLink`), 모바일에서는 텍스트형 로고로 교체
+
+### 반응형
+화면 크기에 따라 레이아웃 열 수와 **API에 요청하는 상품 수(`pageSize`)**가 함께 바뀝니다.
+
+| | 모바일 (~767px) | 태블릿 (768px~) | PC (1200px~) |
+| --- | --- | --- | --- |
+| 베스트 상품 | 1열 · 1개 | 2열 · 2개 | 4열 · 4개 |
+| 판매 중인 상품 | 2열 · 4개 | 3열 · 6개 | 5열 · 10개 |
+
+- `useBreakpoint` 커스텀 훅으로 현재 화면 구분(`mobile` / `tablet` / `pc`)을 반환
+  - `resize` 이벤트로 창 크기 변화를 감지하고, 컴포넌트가 사라지면 이벤트 제거(cleanup)
+  - 너비 숫자 대신 화면 구분 값을 저장해, 기준 너비를 넘을 때만 다시 렌더링
+- 화면 구분이 바뀌면 바뀐 `pageSize`로 상품을 다시 요청
 
 ### API 연동
-[판다마켓 API](https://panda-market-api-crud.vercel.app/docs)를 호출하는 함수를 구현했습니다. 응답 상태 코드가 2XX가 아니면 에러 메시지를 콘솔에 출력합니다.
+[판다마켓 API](https://panda-market-api.vercel.app/docs)의 `GET /products`를 사용합니다.
 
-| 구분 | 파일 | 비동기 처리 | 함수 |
-| --- | --- | --- | --- |
-| 게시글 | `ArticleService.js` | `.then()` / `.catch()` | `getArticleList`, `getArticle`, `createArticle`, `patchArticle`, `deleteArticle` |
-| 상품 | `ProductService.js` | `async/await` / `try/catch` | `getProductList`, `getProduct`, `createProduct`, `patchProduct`, `deleteProduct` |
+| 파라미터 | 설명 |
+| --- | --- |
+| `page` | 페이지 번호 |
+| `pageSize` | 한 페이지에 가져올 상품 수 |
+| `orderBy` | 정렬 기준 (`recent` / `favorite`) |
+| `keyword` | 검색어 |
+
+- `axios.create`로 공통 설정(`baseURL`, `timeout`)을 가진 인스턴스를 만들어 사용
+- 에러는 API 함수가 아닌 컴포넌트에서 `try/catch`로 처리
 
 ## 🛠 기술 스택
 
-- **HTML5** – 시맨틱 마크업, 접근성 속성(`aria-*`, `label`) 적용
-- **CSS3** – CSS 변수 기반 디자인 토큰(색상, 폰트), 미디어 쿼리 반응형
-- **JavaScript (Vanilla)** – 폼 상태 관리, 입력값 처리, `fetch`를 이용한 API 연동, ES Module
+- **React** – 함수 컴포넌트, `useState` / `useEffect`, 커스텀 훅
+- **React Router** – `Link`, `NavLink` 페이지 이동
+- **Tailwind CSS v4** – `@theme`으로 색상·폰트 디자인 토큰 관리, 반응형 접두어(`md:`, `pc:`)
+- **Axios** – API 요청
+- **Vite** – 개발 서버, 빌드
 
 ## 📁 폴더 구조
 
 ```
-panda-market
-├── index.html            # 랜딩 페이지
-├── login/index.html      # 로그인
-├── signup/index.html     # 회원가입
-├── items/index.html      # 상품 목록
-├── faq/index.html        # FAQ
-├── privacy/index.html    # 개인정보처리방침
-└── assets
-    ├── css
-    │   ├── reset.css     # 브라우저 기본 스타일 초기화
-    │   ├── variables.css # 색상·폰트 등 디자인 토큰
-    │   ├── common.css    # 공통 스타일 (폰트, 버튼, 레이아웃, 유틸 클래스)
-    │   ├── style.css     # 랜딩 페이지 스타일
-    │   └── auth.css      # 로그인·회원가입 페이지 스타일
-    ├── js
-    │   ├── main.js            # 폼 로직, API 함수 실행 코드
-    │   ├── ArticleService.js  # 게시글 API 함수
-    │   └── ProductService.js  # 상품 API 함수
-    ├── fonts             # 웹폰트
-    └── images            # 이미지
+src
+├── api
+│   ├── client.js          # axios 인스턴스 (baseURL, timeout)
+│   └── productApi.js      # 상품 API 함수
+├── assets
+│   ├── fonts              # Pretendard 웹폰트
+│   └── images             # 아이콘, 로고
+├── components
+│   ├── Header.jsx
+│   ├── Footer.jsx
+│   ├── Button.jsx         # 공통 버튼 (href가 있으면 Link로 렌더링)
+│   ├── ProductCard.jsx    # 상품 카드 (베스트 / 일반)
+│   ├── SortDropdown.jsx   # 정렬 드롭다운
+│   └── Pagination.jsx     # 페이지네이션
+├── constants
+│   └── routes.js          # 페이지 경로 상수
+├── hooks
+│   └── useBreakpoint.js   # 반응형 커스텀 훅
+├── pages
+│   └── Item.jsx           # 중고마켓 페이지
+├── styles
+│   ├── global.css         # 기본 스타일, 공통 클래스
+│   └── variables.css      # 디자인 토큰 (@theme)
+├── App.jsx                # 레이아웃, 라우트
+└── main.jsx
 ```
