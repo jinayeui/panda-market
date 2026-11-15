@@ -4,10 +4,12 @@ const PRODUCT_URL = `${BASE_URL}/products`;
 export async function getProductList({
     page = 1,
     pageSize = 10,
-    keyword = '',
+    keyword,
 } = {}) {
     try {
-        const params = new URLSearchParams({ page, pageSize, keyword });
+        const params = new URLSearchParams({ page, pageSize });
+        if (keyword?.trim()) params.append('keyword', keyword.trim());
+
         const res = await fetch(`${PRODUCT_URL}?${params}`);
 
         if (!res.ok) throw new Error(`상품 목록 조회 실패: ${res.status}`);
@@ -15,7 +17,7 @@ export async function getProductList({
         const data = await res.json();
         return data;
     } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
     }
 }
 
@@ -28,7 +30,7 @@ export async function getProduct(id) {
         const data = await res.json();
         return data;
     } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
     }
 }
 
@@ -53,7 +55,7 @@ export async function createProduct({
         const data = await res.json();
         return data;
     } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
     }
 }
 
@@ -72,7 +74,7 @@ export async function patchProduct(id, productData) {
         const data = await res.json();
         return data;
     } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
     }
 }
 
@@ -87,6 +89,6 @@ export async function deleteProduct(id) {
         const data = await res.json();
         return data;
     } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
     }
 }

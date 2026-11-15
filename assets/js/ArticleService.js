@@ -1,15 +1,16 @@
 const BASE_URL = 'https://panda-market-api-crud.vercel.app';
 const ARTICLE_URL = `${BASE_URL}/articles`;
 
-export function getArticleList({ page = 1, pageSize = 10, keyword = '' } = {}) {
-    const params = new URLSearchParams({ page, pageSize, keyword });
+export function getArticleList({ page = 1, pageSize = 10, keyword } = {}) {
+    const params = new URLSearchParams({ page, pageSize });
+    if (keyword?.trim()) params.append('keyword', keyword.trim());
 
     return fetch(`${ARTICLE_URL}?${params}`)
         .then((res) => {
             if (!res.ok) throw new Error(`게시글 목록 조회 실패: ${res.status}`);
             return res.json();
         })
-        .catch((error) => console.log(error.message));
+        .catch((error) => console.error(error.message));
 }
 
 export function getArticle(id) {
@@ -18,7 +19,7 @@ export function getArticle(id) {
             if (!res.ok) throw new Error(`게시글 상세 조회 실패: ${res.status}`);
             return res.json();
         })
-        .catch((error) => console.log(error.message));
+        .catch((error) => console.error(error.message));
 }
 
 export function createArticle({ title, content, image }) {
@@ -33,7 +34,7 @@ export function createArticle({ title, content, image }) {
             if (!res.ok) throw new Error(`게시글 등록 실패: ${res.status}`);
             return res.json();
         })
-        .catch((error) => console.log(error.message));
+        .catch((error) => console.error(error.message));
 }
 
 export function patchArticle(id, articleData) {
@@ -48,7 +49,7 @@ export function patchArticle(id, articleData) {
             if (!res.ok) throw new Error(`게시글 수정 실패: ${res.status}`);
             return res.json();
         })
-        .catch((error) => console.log(error.message));
+        .catch((error) => console.error(error.message));
 }
 
 export function deleteArticle(id) {
@@ -59,5 +60,5 @@ export function deleteArticle(id) {
             if (!res.ok) throw new Error(`게시글 삭제 실패: ${res.status}`);
             return res.json();
         })
-        .catch((error) => console.log(error.message));
+        .catch((error) => console.error(error.message));
 }
