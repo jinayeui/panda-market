@@ -4,9 +4,15 @@
 
 | 경로 | 페이지 |
 | --- | --- |
-| `/` | 중고마켓 (상품 목록) |
+| `/` | 랜딩 페이지 |
+| `/items` | 중고마켓 (상품 목록) |
+| 그 외 (`/login`, `/board`, `/registration` 등) | 준비 중 안내 페이지 |
 
 ## ✨ 주요 기능
+
+### 랜딩 페이지
+- 히어로 섹션, 서비스 소개(Hot item / Search / Register), 하단 배너로 구성
+- "구경하러 가기" 버튼으로 중고마켓 페이지 이동
 
 ### 중고마켓 페이지
 - **베스트 상품**: 좋아요가 많은 순서로 상품 표시 (`orderBy=favorite`)
@@ -15,10 +21,12 @@
   - **검색**: 검색어 입력 후 Enter로 검색, 결과가 없으면 안내 문구 표시
   - **페이지네이션**: 이전/다음 버튼과 페이지 번호 5개씩 표시, 현재 페이지 강조
   - 정렬이나 검색을 바꾸면 1페이지로 이동
-- 상품 이미지가 없거나 불러오지 못하면 회색 기본 영역 표시
+- 상품 이미지가 없거나 불러오지 못하면 기본 이미지(`img_default.png`) 표시
 
 ### 공통
 - 헤더: 현재 페이지 메뉴 강조 (`NavLink`), 모바일에서는 텍스트형 로고로 교체
+- 레이아웃: 중첩 라우트와 `Outlet`으로 헤더·푸터를 모든 페이지에 공통 적용
+- 아직 만들지 않은 페이지나 없는 주소로 이동하면 준비 중 안내 페이지 표시 (`path='*'`)
 
 ### 반응형
 화면 크기에 따라 레이아웃 열 수와 **API에 요청하는 상품 수(`pageSize`)**가 함께 바뀝니다.
@@ -44,15 +52,17 @@
 | `keyword` | 검색어 |
 
 - `axios.create`로 공통 설정(`baseURL`, `timeout`)을 가진 인스턴스를 만들어 사용
+- `baseURL`은 환경 변수 `VITE_API_BASE_URL`을 사용하고, 없으면 기본 API 주소 사용
 - 에러는 API 함수가 아닌 컴포넌트에서 `try/catch`로 처리
 
 ## 🛠 기술 스택
 
 - **React** – 함수 컴포넌트, `useState` / `useEffect`, 커스텀 훅
-- **React Router** – `Link`, `NavLink` 페이지 이동
+- **React Router** – 중첩 라우트와 `Outlet` 레이아웃, `Link` / `NavLink` 페이지 이동
 - **Tailwind CSS v4** – `@theme`으로 색상·폰트 디자인 토큰 관리, 반응형 접두어(`md:`, `pc:`)
 - **Axios** – API 요청
 - **Vite** – 개발 서버, 빌드
+- **Vercel** – `main` 브랜치 push 시 자동 배포
 
 ## 📁 폴더 구조
 
@@ -63,7 +73,7 @@ src
 │   └── productApi.js      # 상품 API 함수
 ├── assets
 │   ├── fonts              # Pretendard 웹폰트
-│   └── images             # 아이콘, 로고
+│   └── images             # 아이콘, 로고, 랜딩 이미지
 ├── components
 │   ├── Header.jsx
 │   ├── Footer.jsx
@@ -75,11 +85,17 @@ src
 │   └── routes.js          # 페이지 경로 상수
 ├── hooks
 │   └── useBreakpoint.js   # 반응형 커스텀 훅
+├── layout
+│   ├── Layout.jsx         # 헤더 + 본문(Outlet) + 푸터
+│   └── Contents.jsx       # 본문 좌우 여백 영역
 ├── pages
-│   └── Item.jsx           # 중고마켓 페이지
+│   ├── LandingPage.jsx    # 랜딩 페이지
+│   ├── ItemsPage.jsx      # 중고마켓 페이지
+│   ├── RegistrationPage.jsx # 상품 등록 페이지 (작업 중)
+│   └── ComingSoonPage.jsx # 준비 중 안내 페이지
 ├── styles
 │   ├── global.css         # 기본 스타일, 공통 클래스
 │   └── variables.css      # 디자인 토큰 (@theme)
-├── App.jsx                # 레이아웃, 라우트
+├── App.jsx                # 라우트 설정
 └── main.jsx
 ```
