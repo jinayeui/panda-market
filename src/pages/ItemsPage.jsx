@@ -1,3 +1,4 @@
+import { ROUTES } from '../constants/routes.js';
 import { useState, useEffect } from 'react';
 import { getProducts } from '../api/productApi.js';
 import useBreakpoint from '../hooks/useBreakpoint.js';
@@ -15,7 +16,7 @@ const SORT_OPTIONS = [
 const BEST_PAGE_SIZE = { mobile: 1, tablet: 2, pc: 4 };
 const ALL_PAGE_SIZE = { mobile: 4, tablet: 6, pc: 10 };
 
-export default function Item() {
+export default function ItemsPage() {
   const breakpoint = useBreakpoint();
   const [bestProducts, setBestProducts] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
@@ -116,6 +117,7 @@ export default function Item() {
             />
           </form>
           <Button
+            href={ROUTES.REGIST}
             size='sm-42'
             className='order-2 w-auto px-[1.44rem] md:order-0'
           >

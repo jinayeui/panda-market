@@ -97,10 +97,13 @@
 
     #container {
         padding-top: 70px;
-        padding-inline: 24px;
+        
+        .page-contents {
+            padding-inline: 24px;
 
-        @media (max-width: 767px) {
-            padding-inline: 16px;
+            @media (max-width: 767px) {
+                padding-inline: 16px;
+            }
         }
     }
 
@@ -126,6 +129,18 @@
     /* Inner */
     .inner {
         width: min(100%, 75rem);
+        height: 100%;
+        margin: 0 auto;
+    }
+
+    .inner-sm {
+        width: min(100%, 61.75rem);
+        height: 100%;
+        margin: 0 auto;
+    }
+
+    .inner-md {
+        width: min(100%, 69.38rem);
         height: 100%;
         margin: 0 auto;
     }
