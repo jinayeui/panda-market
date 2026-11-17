@@ -4,6 +4,7 @@ import Layout from './layout/Layout';
 import Contents from './layout/Contents';
 import LandingPage from './pages/LandingPage';
 import ItemsPage from './pages/ItemsPage';
+import ComingSoonPage from './pages/ComingSoonPage';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route element={<Contents />}>
             <Route path={ROUTES.ITEMS} element={<ItemsPage />}></Route>
           </Route>
+          <Route path='*' element={<ComingSoonPage />}></Route>
         </Route>
       </Routes>
     </div>
