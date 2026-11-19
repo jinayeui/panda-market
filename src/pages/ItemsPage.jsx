@@ -79,14 +79,14 @@ export default function ItemsPage() {
 
   return (
     <>
-      <section className='inner pt-[1.06rem] pb-6 md:pt-6 md:pb-10'>
+      <section className='inner pb-6 md:pb-10'>
         <h2 className='text-xl-bold text-secondary-900'>베스트 상품</h2>
         <ul className='mt-4 grid grid-cols-1 gap-2.5 md:grid-cols-2 pc:grid-cols-4 pc:gap-6'>
           {bestProducts.map((prd) => (
             <ProductCard
               key={prd.id}
               variant='best'
-              thumbSrc={prd.images[0]}
+              thumbSrc={prd.images?.[0]}
               title={prd.name}
               price={prd.price}
               favoriteCount={prd.favoriteCount}
@@ -94,7 +94,7 @@ export default function ItemsPage() {
           ))}
         </ul>
       </section>
-      <section className='inner pb-[8.44rem] md:pb-[10.31rem] pc:pb-35'>
+      <section className='inner'>
         <div className='flex flex-wrap items-center gap-x-3.5 gap-y-2 md:flex-nowrap md:gap-3'>
           <h2 className='order-1 mr-auto text-xl-bold text-secondary-900 md:order-0'>
             판매 중인 상품

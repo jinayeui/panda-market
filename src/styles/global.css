@@ -43,7 +43,7 @@
     }
 
     input {
-        padding: .94rem 1.5rem;
+        padding-inline: 1.5rem;
         width: 100%;
         background-color: var(--color-secondary-100);
         border: 1px solid transparent;
@@ -61,31 +61,33 @@
             color: var(--color-secondary-400);
         }
 
-        &:has(+ .toggle-pw-btn) {
-            padding-right: 3.13rem;
+        &[aria-invalid='true'] {
+            border-color: var(--color-error);
+        }
+    }
 
-            &::-ms-reveal {
-                display: none;
-            }
+    textarea {
+        width: 100%;
+        padding: 1rem 1.5rem;
+        overflow-y: auto;
+        resize: none;
+        background-color: var(--color-secondary-100);
+        border: 1px solid transparent;
+        border-radius: 0.75rem;
+        outline: none;
+        @apply text-lg-regular;
 
-            +.toggle-pw-btn {
-                position: absolute;
-                bottom: 1rem;
-                right: 1.5rem;
-                width: 1.5rem;
-                height: 1.5rem;
-                background-repeat: no-repeat;
-                background-position: center;
-                background-size: contain;
+        &:active,
+        &:focus {
+            border-color: var(--color-primary-100);
+        }
 
-                &[aria-pressed='false'] {
-                    background-image: url('../assets/images/btn_visibility_off.png');
-                }
+        &::placeholder {
+            color: var(--color-secondary-400);
+        }
 
-                &[aria-pressed='true'] {
-                    background-image: url('../assets/images/btn_visibility_on.png');
-                }
-            }
+        &[aria-invalid='true'] {
+            border-color: var(--color-error);
         }
     }
 }
@@ -116,14 +118,6 @@
         font-size: 0;
         text-indent: -99999px;
         pointer-events: none;
-    }
-
-    .error-message {
-        display: none;
-        margin-top: .5rem;
-        font-size: .94rem;
-        font-weight: 600;
-        color: var(--color-error);
     }
 
     /* Inner */

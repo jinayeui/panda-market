@@ -6,7 +6,9 @@
 | --- | --- |
 | `/` | 랜딩 페이지 |
 | `/items` | 중고마켓 (상품 목록) |
-| 그 외 (`/login`, `/board`, `/registration` 등) | 준비 중 안내 페이지 |
+| `/items/:id` | 상품 상세 (작업 중) |
+| `/registration` | 상품 등록 |
+| 그 외 (`/login`, `/board` 등) | 준비 중 안내 페이지 |
 
 ## ✨ 주요 기능
 
@@ -22,6 +24,24 @@
   - **페이지네이션**: 이전/다음 버튼과 페이지 번호 5개씩 표시, 현재 페이지 강조
   - 정렬이나 검색을 바꾸면 1페이지로 이동
 - 상품 이미지가 없거나 불러오지 못하면 기본 이미지(`img_default.png`) 표시
+
+### 상품 등록 페이지
+- 상품명, 상품 소개, 판매가격, 태그 입력 폼
+- **유효성 검사** (`useProductForm` 커스텀 훅)
+
+  | 항목 | 조건 |
+  | --- | --- |
+  | 상품명 | 필수, 10자 이내 |
+  | 상품 소개 | 10자 이상 100자 이내 |
+  | 판매가격 | 필수, 숫자만 입력 |
+  | 태그 | 5글자 이내, 1개 이상 등록 |
+
+  - 입력란을 한 번 벗어난(blur) 뒤부터 에러 메시지와 빨간 테두리 표시 (태그는 입력 즉시)
+- **태그**: Enter로 추가, 중복 태그는 추가하지 않음, 삭제 버튼으로 제거
+  - 한글 입력 중(조합 중) Enter는 무시해 마지막 글자가 중복 입력되지 않도록 처리
+- 모든 항목이 채워지고 에러가 없을 때만 등록 버튼 활성화
+- 등록 중에는 버튼을 비활성화해 중복 제출 방지
+- 등록에 성공하면 해당 상품 상세 페이지로 이동
 
 ### 공통
 - 헤더: 현재 페이지 메뉴 강조 (`NavLink`), 모바일에서는 텍스트형 로고로 교체
@@ -42,7 +62,14 @@
 - 화면 구분이 바뀌면 바뀐 `pageSize`로 상품을 다시 요청
 
 ### API 연동
-[판다마켓 API](https://panda-market-api.vercel.app/docs)의 `GET /products`를 사용합니다.
+[판다마켓 API](https://panda-market-api.vercel.app/docs)를 사용합니다.
+
+| 함수 | 요청 | 용도 |
+| --- | --- | --- |
+| `getProducts` | `GET /products` | 상품 목록 조회 |
+| `createProduct` | `POST /products` | 상품 등록 |
+
+`getProducts` 파라미터
 
 | 파라미터 | 설명 |
 | --- | --- |
@@ -58,7 +85,7 @@
 ## 🛠 기술 스택
 
 - **React** – 함수 컴포넌트, `useState` / `useEffect`, 커스텀 훅
-- **React Router** – 중첩 라우트와 `Outlet` 레이아웃, `Link` / `NavLink` 페이지 이동
+- **React Router** – 중첩 라우트와 `Outlet` 레이아웃, `Link` / `NavLink` / `useNavigate` 페이지 이동, 동적 경로(`/items/:id`)
 - **Tailwind CSS v4** – `@theme`으로 색상·폰트 디자인 토큰 관리, 반응형 접두어(`md:`, `pc:`)
 - **Axios** – API 요청
 - **Vite** – 개발 서버, 빌드
@@ -78,20 +105,25 @@ src
 │   ├── Header.jsx
 │   ├── Footer.jsx
 │   ├── Button.jsx         # 공통 버튼 (href가 있으면 Link로 렌더링)
+│   ├── InputField.jsx     # 라벨 + 입력창 + 에러 메시지 (비밀번호 보기 토글 지원)
+│   ├── TextareaField.jsx  # 라벨 + 여러 줄 입력창 + 에러 메시지
+│   ├── TagField.jsx       # 태그 입력 및 목록
 │   ├── ProductCard.jsx    # 상품 카드 (베스트 / 일반)
 │   ├── SortDropdown.jsx   # 정렬 드롭다운
 │   └── Pagination.jsx     # 페이지네이션
 ├── constants
 │   └── routes.js          # 페이지 경로 상수
 ├── hooks
-│   └── useBreakpoint.js   # 반응형 커스텀 훅
+│   ├── useBreakpoint.js   # 반응형 커스텀 훅
+│   └── useProductForm.js  # 상품 등록 폼 상태, 유효성 검사
 ├── layout
 │   ├── Layout.jsx         # 헤더 + 본문(Outlet) + 푸터
-│   └── Contents.jsx       # 본문 좌우 여백 영역
+│   └── Contents.jsx       # 본문 여백 영역
 ├── pages
 │   ├── LandingPage.jsx    # 랜딩 페이지
 │   ├── ItemsPage.jsx      # 중고마켓 페이지
-│   ├── RegistrationPage.jsx # 상품 등록 페이지 (작업 중)
+│   ├── ItemsDetailPage.jsx # 상품 상세 페이지 (작업 중)
+│   ├── RegistrationPage.jsx # 상품 등록 페이지
 │   └── ComingSoonPage.jsx # 준비 중 안내 페이지
 ├── styles
 │   ├── global.css         # 기본 스타일, 공통 클래스

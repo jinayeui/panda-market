@@ -11,8 +11,8 @@ export default function ProductCard({
   price,
   favoriteCount,
 }) {
-  const [isImageError, setIsImageError] = useState(false);
-  const hasImage = thumbSrc && !isImageError;
+  const [imgError, setImgError] = useState(false);
+  const hasImage = thumbSrc && !imgError;
 
   const thumbRadius =
     variant === 'best' ? 'rounded-2xl' : 'rounded-xl md:rounded-2xl';
@@ -25,11 +25,11 @@ export default function ProductCard({
             <img
               className='h-full'
               src={thumbSrc}
-              onError={() => setIsImageError(true)}
+              onError={() => setImgError(true)}
               alt={`${title} 이미지`}
             />
           ) : (
-            <img className='h-full' src={imgDefault} aria-hidden='true' />
+            <img className='h-full' src={imgDefault} alt='' />
           )}
         </div>
         <div className='mt-4 flex flex-col gap-1.5'>
